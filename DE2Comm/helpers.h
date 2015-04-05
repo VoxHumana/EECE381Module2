@@ -36,5 +36,11 @@ void checkButtons();
 char checkInterrupt();
 void initializeIMU();
 void getAngle();
+short readSliders(int channel);
+
+extern short gyro_x_low, gyro_y_low, gyro_z_low, gyro_x_high, gyro_y_high, gyro_z_high;
+extern short acc_x_high, acc_x_low, acc_y_high, acc_y_low, acc_z_high, acc_z_low;
+extern float accXAngle, accYAngle, gyroXAngle, gyroYAngle, CFangleX, CFangleY, loopTime, rate_gyr_x, rate_gyr_y;
+extern int adcTest;
 
 #endif /* HELPERS_H_ */

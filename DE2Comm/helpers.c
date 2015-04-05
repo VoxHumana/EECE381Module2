@@ -43,6 +43,7 @@ bool pressed = false, pressed2 = false, pressed3 = false;
 short gyro_x_low, gyro_y_low, gyro_z_low, gyro_x_high, gyro_y_high, gyro_z_high;
 short acc_x_high, acc_x_low, acc_y_high, acc_y_low, acc_z_high, acc_z_low;
 float accXAngle, accYAngle, gyroXAngle, gyroYAngle, CFangleX, CFangleY, loopTime, rate_gyr_x, rate_gyr_y;
+int adcTest;
 
 void checkButtons()
 {
@@ -252,7 +253,7 @@ void getAngle(){
 	CFangleX = 0.98*(CFangleX+gyroXAngle)+(0.02)*accXAngle;
 	CFangleY = 0.98*(CFangleY+gyroYAngle)+(0.02)*accYAngle;
 
-	printf("The angle is: %f        %f       %f\n", CFangleY, gyroYAngle, accYAngle);
+	//printf("The angle is: %f        %f       %f\n", CFangleY, gyroYAngle, accYAngle);
 }
 
 char checkInterrupt(){
@@ -262,4 +263,17 @@ char checkInterrupt(){
 	I2C_start(I2C_BASE, ACCELEROMETER_ADDR, 1);
 	int_values = I2C_read(I2C_BASE, 1);
 	return int_values;
+}
+
+short readSliders(int channel){
+	short adcValues = IORD_32DIRECT(ADC, 0);
+	short firstChannel = (adcValues & 0x00FF);
+	short secondChannel = (adcValues &0x00FF00) >> 8;
+	short error = 0;
+	if( channel == 1 ){
+		return (firstChannel/25)*10;
+	} else if( channel == 2 ) {
+		return (secondChannel/25)*10;
+	}
+	return error;
 }

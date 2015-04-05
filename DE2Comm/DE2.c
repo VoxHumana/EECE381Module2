@@ -47,6 +47,7 @@ bool positiveTiltX = false, negativeTiltX = false, positiveTiltY = false, negati
 bool singleTap = false, doubleTap = false;
 
 char int_source;
+short firstChannel, prevFirstChannel, secondChannel, prevSecondChannel;
 float CFangleX, CFangleY, loopTime;
 
 int main() {
@@ -56,24 +57,41 @@ int main() {
 	int start, end;
 
 	initializeIMU();
-
+	prevFirstChannel = readSliders(1);
+	prevSecondChannel = readSliders(2);
 	while(1){
 
 		start = alt_timestamp_start();
 
-		getAngle();
+		checkButtons();
 
-		int_source = checkInterrupt();
+		firstChannel = readSliders(1);
+		secondChannel = readSliders(2);
+//		printf("First slider:  %d     Second slider:  %d\n", firstChannel, secondChannel);
 
-		if(((int_source & 0x20) == 0x20) && !tilted){
-			printf("Double tap detected\n");
-			send('Y');
-		} else if(((int_source & 0x40) == 0x40) && !tilted) {
-			printf("Single tap detected\n");
-			send('Z');
+		if(firstChannel != prevFirstChannel) {
+			send('A');
+			send(firstChannel);
+//			printf("Value changed. Old:   %d    New:   %d\n", prevFirstChannel, firstChannel);
+		} else if (secondChannel != prevSecondChannel) {
+			send('B');
+			send(secondChannel);
+//			printf("Value changed. Old:   %d    New:   %d\n", prevSecondChannel, secondChannel);
 		}
 
-		checkButtons();
+		prevFirstChannel = firstChannel;
+		prevSecondChannel = secondChannel;
+		getAngle();
+
+//		int_source = checkInterrupt();
+//
+//		if(((int_source & 0x20) == 0x20) && !tilted){
+//			printf("Double tap detected\n");
+//			send('Y');
+//		} else if(((int_source & 0x40) == 0x40) && !tilted) {
+//			printf("Single tap detected\n");
+//			send('Z');
+//		}
 
 		if((CFangleX > 45) && !positiveTiltX && !tilted){
 			printf("Went over 45 in X\n");
@@ -90,32 +108,34 @@ int main() {
 			tilted = true;
 		} else if((CFangleX > -30) && negativeTiltX && tilted) {
 			printf("Back over -30 in X\n");
-			send('D');
+//			send('D');
 			negativeTiltX = false;
 			tilted = false;
 		}
+//
+//		if((CFangleY > 45) && !positiveTiltY && !tilted){
+//			printf("Went over 45 in Y\n");
+//			positiveTiltY = true;
+//			tilted = true;
+//		} else if((CFangleY < 40) && positiveTiltY && tilted) {
+//			printf("Back under 40 in Y\n");
+//			send('G');
+//			CFangleY = 0;
+//			positiveTiltY = false;
+//			tilted = false;
+//		} else if((CFangleY < -45) && !negativeTiltY && !tilted){
+//			printf("Went under -45 in Y\n");
+//			negativeTiltY = true;
+//			tilted = true;
+//		} else if((CFangleY > -40) && negativeTiltY && tilted) {
+//			printf("Back over -40 in Y\n");
+//			send('H');
+//			CFangleY = 0;
+//			negativeTiltY = false;
+//			tilted = false;
+//		}
 
-		if((CFangleY > 45) && !positiveTiltY && !tilted){
-			printf("Went over 45 in Y\n");
-			positiveTiltY = true;
-			tilted = true;
-		} else if((CFangleY < 40) && positiveTiltY && tilted) {
-			printf("Back under 40 in Y\n");
-			send('G');
-			CFangleY = 0;
-			positiveTiltY = false;
-			tilted = false;
-		} else if((CFangleY < -45) && !negativeTiltY && !tilted){
-			printf("Went under -45 in Y\n");
-			negativeTiltY = true;
-			tilted = true;
-		} else if((CFangleY > -40) && negativeTiltY && tilted) {
-			printf("Back over -40 in Y\n");
-			send('H');
-			CFangleY = 0;
-			negativeTiltY = false;
-			tilted = false;
-		}
+
 		do {
 		end = alt_timestamp();
 		loopTime = (float)(end-start)/(float)alt_timestamp_freq();
