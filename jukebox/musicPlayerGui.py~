@@ -62,7 +62,7 @@ class playmusic:
 		self.root.title("Jukebox Music Player")
 	
 		self.root.configure(background = 'black')
-		self.root.geometry('500x500+500+300')
+		self.root.geometry('500x250+750+300')
 		
 		top = Frame(self.root)
 		center = Frame(self.root)
