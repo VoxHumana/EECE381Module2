@@ -46,8 +46,16 @@ GPIO.setup(PIflag, GPIO.OUT)
 
 #GPIO.add_event_detect(DE2flag, GPIO.RISING, callback=interrupt, bouncetime=50)
 
-bass_band_1 = shlex.split("sudo amixer -D equal cset numid=1")
-treble_band_1 = shlex.split("sudo amixer -D equal cset numid=8")
+freq_band_1 = shlex.split("sudo amixer -D equal cset numid=2")
+freq_band_2 = shlex.split("sudo amixer -D equal cset numid=3")
+freq_band_3 = shlex.split("sudo amixer -D equal cset numid=4")
+freq_band_4 = shlex.split("sudo amixer -D equal cset numid=5")
+freq_band_5 = shlex.split("sudo amixer -D equal cset numid=6")
+freq_band_6 = shlex.split("sudo amixer -D equal cset numid=7")
+freq_band_7 = shlex.split("sudo amixer -D equal cset numid=8")
+freq_band_8 = shlex.split("sudo amixer -D equal cset numid=9")
+
+volume_control = shlex.split("sudo amixer cset numid=1")
 
 play_list_window = None
 
@@ -140,7 +148,7 @@ class playmusic:
 
 	def move(self):
 		global play_list_window
-	        path = '/home/pi/Desktop/jukebox/*.m4a'
+	        path = '/home/pi/EECE381Module2/jukebox/*.m4a'
        	 	files = glob.glob(path)
 		index = play_list_window.size()
 		songs = play_list_window.get(0, index-1)
@@ -205,20 +213,76 @@ def interrupt(channel):
 	if idChar == 'A':
 		amp_value = receive()
 		print amp_value
-		cmd = bass_band_1
+		cmd = freq_band_1
 		cmd.append(str(amp_value))
+		print cmd
+		call(cmd)
+		cmd.pop()
+	elif idChar == 'B':
+		amp_value = receive()
+		print amp_value
+		cmd = freq_band_2
+		cmd.append(str(amp_value))
+		print cmd
+		call(cmd)
+		cmd.pop()
+	elif idChar == 'C':
+		amp_value = receive()
+		print amp_value
+		cmd = freq_band_3
+		cmd.append(str(amp_value))
+		print cmd
+		call(cmd)
+		cmd.pop()
+	elif idChar == 'D':
+		amp_value = receive()
+		print amp_value
+		cmd = freq_band_4
+		cmd.append(str(amp_value))
+		print cmd
+		call(cmd)
+		cmd.pop()
+	elif idChar == 'E':
+		amp_value = receive()
+		print amp_value
+		cmd = freq_band_5
+		cmd.append(str(amp_value))
+		print cmd
+		call(cmd)
+		cmd.pop()
+	elif idChar == 'F':
+		amp_value = receive()
+		print amp_value
+		cmd = freq_band_6
+		cmd.append(str(amp_value))
+		print cmd
+		call(cmd)
+		cmd.pop()
+	elif idChar == 'G':
+		amp_value = receive()
+		print amp_value
+		cmd = freq_band_7
+		cmd.append(str(amp_value))
+		print cmd
+		call(cmd)
+		cmd.pop()
+	elif idChar == 'H':
+		amp_value = receive()
+		print amp_value
+		cmd = freq_band_8
+		cmd.append(str(amp_value))
+		print cmd
+		call(cmd)
+		cmd.pop()
+	elif idChar == 'V':
+		amp_value = receive()
+		print amp_value
+		cmd = volume_control
+		cmd.append(str(amp_value)+'%')
 		print cmd
 		call(cmd)
 		cmd.pop()
 
-	elif idChar == 'B':
-		amp_value = receive()
-		print amp_value
-		cmd = treble_band_1
-		cmd.append(str(amp_value))
-		print cmd
-		call(cmd)
-		cmd.pop()
 							
 def callback(event):
 		global music
