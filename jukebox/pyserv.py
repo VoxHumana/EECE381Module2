@@ -12,10 +12,10 @@ class PostHandler(BaseHTTPRequestHandler):
 			environ={'REQUEST_METHOD':'POST'})
 		songKeywords =  form.getvalue("keywords")
                 print songKeywords
-		subprocess.call(["youtube-dl", "--extract-audio","--audio-format", "mp3",  "--default-search", "ytsearch", str(songKeywords)])
+		subprocess.call(["youtube-dl", "--extract-audio",  "--default-search", "auto", str(songKeywords)])
 if __name__ == '__main__':
 	from BaseHTTPServer import HTTPServer
-	server = HTTPServer(('206.87.192.45', 8080), PostHandler)
+	server = HTTPServer(('206.87.194.102', 8080), PostHandler)
 	print 'starting server'
 	server.serve_forever()
        

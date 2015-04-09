@@ -1,4 +1,4 @@
-from subprocess import call
+from subprocess import call 
 import subprocess
 
 import RPi.GPIO as GPIO
@@ -14,9 +14,11 @@ import errno
 import shlex
 import ttk
 
+import pygame
 import vlc
-
+pygame.mixer.init()
 music = vlc.MediaPlayer()
+snare = pygame.mixer.Sound("snare.wav")
 
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
@@ -118,7 +120,6 @@ class playmusic:
                 fg='white', command = self.stop, bg="SpringGreen4")
 	        pause_button = Button(bottom, width = 5, height = 1, text = 'Pause',
 	                fg='white', command = self.pause, bg="DodgerBlue4")
-		play_list_window.insert(END, "0")
 		
 		play_button.pack(in_=bottom,side=LEFT, fill = BOTH, expand = True)
 		pause_button.pack(in_=bottom,side=LEFT, fill = BOTH, expand = True)
@@ -133,6 +134,7 @@ class playmusic:
 	def play(self):
 		global music
 		music.play()
+		print "started playing"
 		self.pbar.start(1200)
 	def stop(self):
 		global music
@@ -165,14 +167,6 @@ class playmusic:
         			play_list_window.insert(END, x)
 		self.root.after(100,self.move)
 	
-	#def getcommand(self):
-		#path = '/home/pi/Desktop/jukebox/commands.txt'
-		#f = open(path)
-		#data = f.read()
-		#data = 'A'
-		#if data=='A':
-		#	print data
-
 	def getlyrics(self):	
 		i=open("text1.txt", "w")
 		print self.artist.get()
@@ -282,7 +276,11 @@ def interrupt(channel):
 		print cmd
 		call(cmd)
 		cmd.pop()
-
+	elif idChar == 'S':
+		global snare
+		#snare= vlc.MediaPlayer('snare.mp3')
+		snare.play()
+				
 							
 def callback(event):
 		global music
@@ -293,7 +291,7 @@ def callback(event):
 		value = os.path.basename(value)
 		print value
 		music = vlc.MediaPlayer(value)
-	
+
 if __name__== "__main__":
 	playmusic()
 	
