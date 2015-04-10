@@ -15,7 +15,7 @@ class PostHandler(BaseHTTPRequestHandler):
 		subprocess.call(["youtube-dl", "--extract-audio",  "--default-search", "auto", str(songKeywords)])
 if __name__ == '__main__':
 	from BaseHTTPServer import HTTPServer
-	server = HTTPServer(('206.87.194.102', 8080), PostHandler)
+	server = HTTPServer(('206.87.193.35', 8080), PostHandler)
 	print 'starting server'
 	server.serve_forever()
        

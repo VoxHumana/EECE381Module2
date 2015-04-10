@@ -19,6 +19,9 @@ import vlc
 pygame.mixer.init()
 music = vlc.MediaPlayer()
 snare = pygame.mixer.Sound("snare.wav")
+perc = pygame.mixer.Sound("percuss.wav") 
+xylo = pygame.mixer.Sound("xylo.wav") 
+drum = pygame.mixer.Sound("drum.wav") 
 
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
@@ -278,8 +281,16 @@ def interrupt(channel):
 		cmd.pop()
 	elif idChar == 'S':
 		global snare
-		#snare= vlc.MediaPlayer('snare.mp3')
 		snare.play()
+	elif idChar == 'T':
+		global perc
+		perc.play()
+	elif idChar == 'U':
+		global xylo
+		xylo.play()
+	elif idChar == 'W':
+		global drum
+		drum.play()
 				
 							
 def callback(event):
